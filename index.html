@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Motivational Msg App</title>
+    <style>
+        body {
+            background-color: darkseagreen;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Motivational Msg App</h1>
+        <button id="getMsgBtn">Get Quote</button>
+        <h2 id="msg"></h2>
+        <h2 id="aut"></h2>
+    </div>
+    <script>
+        document.getElementById('getMsgBtn').addEventListener('click', function() {
+            let msg = document.getElementById("msg");
+            let aut = document.getElementById("aut");
+            let url = "https://type.fit/api/quotes";
+            
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Select a random quote from the array
+                    let randomIndex = Math.floor(Math.random() * data.length);
+                    let quote = data[randomIndex].text;
+                    let author = data[randomIndex].author ? data[randomIndex].author : "Unknown";
+
+                    // Update UI to display quote and author
+                    msg.innerHTML = `"${quote}"`;
+                    aut.innerHTML = author; // Display author's name without additional text
+                })
+                .catch(err => msg.innerHTML = "Issue: " + err.message);
+        });
+    </script>
+</body>
+</html>
